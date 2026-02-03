@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - LocalFix</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dashboard">
+    <div class="container">
+        <div class="nav-brand">
+            <a href="seller.html" class="brand-link">
+                <h2 class="brand">
+                    <span class="brand-local">Local</span>
+                    <span class="brand-fix">Fix</span>
+                </h2>
+            </a>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="seller.html" class="active">Dashboard</a></li>
+            <li><a href="profileseller.html">Profile</a></li>
+            <li><a href="#" id="logoutBtn" class="btn-outline">Logout</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+
+    <div class="dashboard-container">
+        <div class="container">
+            <h1>Service Provider Dashboard</h1>
+
+            <!-- Dashboard Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Earnings</h3>
+                    <p class="stat-value">Rs 12,450</p>
+                    <span class="stat-label">This month</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Completed Jobs</h3>
+                    <p class="stat-value">24</p>
+                    <span class="stat-label">This month</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Rating</h3>
+                    <p class="stat-value">4.8 ★</p>
+                    <span class="stat-label">Average rating</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Requests</h3>
+                    <p class="stat-value">2</p>
+                    <span class="stat-label">New bookings</span>
+                </div>
+            </div>
+
+            <!-- Availability Toggle -->
+            <div class="availability-section">
+                <h2>Availability Status</h2>
+                <div class="availability-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="availabilityToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span id="availabilityStatus" class="status-text available">Available for bookings</span>
+                </div>
+            </div>
+
+            <!-- Services Offered -->
+            <div class="services-section">
+                <h2>Your Services</h2>
+                <div class="services-list">
+                    <div class="service-item">
+                        <div class="service-info">
+                            <h3>Basic Plumbing</h3>
+                            <p>Pipe repairs, leak fixing, tap installation</p>
+                        </div>
+                        <div class="service-price">
+                            <span>Starting at Rs 500</span>
+                            <button class="btn-small btn-outline">Edit</button>
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-info">
+                            <h3>Emergency Plumbing</h3>
+                            <p>24/7 emergency services</p>
+                        </div>
+                        <div class="service-price">
+                            <span>Starting at Rs 1,000</span>
+                            <button class="btn-small btn-outline">Edit</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary">Add New Service</button>
+            </div>
+
+            <!-- Booking Requests -->
+            <div class="bookings-section">
+                <h2>Recent Booking Requests</h2>
+                <div class="bookings-list">
+                    <div class="booking-item pending">
+                        <div class="booking-info">
+                            <h3>Imashi</h3>
+                            <p>Service: Pipe Repair</p>
+                            <p class="booking-time">Requested 2 hours ago</p>
+                        </div>
+                        <div class="booking-actions">
+                            <button class="btn-small btn-primary">Accept</button>
+                            <button class="btn-small btn-outline">Decline</button>
+                        </div>
+                    </div>
+                    <div class="booking-item pending">
+                        <div class="booking-info">
+                            <h3>Thejana Isira</h3>
+                            <p>Service: Tap Installation</p>
+                            <p class="booking-time">Requested 5 hours ago</p>
+                        </div>
+                        <div class="booking-actions">
+                            <button class="btn-small btn-primary">Accept</button>
+                            <button class="btn-small btn-outline">Decline</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="reviews-section">
+                <h2>Recent Reviews</h2>
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <h4>Manusha Pathirana</h4>
+                            <div class="stars">★★★★★</div>
+                        </div>
+                        <p>"Excellent service! Fixed my leaking pipe quickly and professionally."</p>
+                        <span class="review-date">2 days ago</span>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <h4>Udara Vimukthi</h4>
+                            <div class="stars">★★★★☆</div>
+                        </div>
+                        <p>"Good work, arrived on time. Would recommend."</p>
+                        <span class="review-date">5 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check if user is logged in and is a seller
+        const currentUser = getCurrentUser();
+        if (!currentUser || currentUser.role !== 'seller') {
+            window.location.href = 'login.html';
+        } else {
+            
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            logoutUser();
+            window.location.href = 'index.html';
+        });
+
+        // Availability toggle
+        const availabilityToggle = document.getElementById('availabilityToggle');
+        const availabilityStatus = document.getElementById('availabilityStatus');
+
+        availabilityToggle.addEventListener('change', function() {
+            if (this.checked) {
+                availabilityStatus.textContent = 'Available for bookings';
+                availabilityStatus.className = 'status-text available';
+            } else {
+                availabilityStatus.textContent = 'Not accepting bookings';
+                availabilityStatus.className = 'status-text busy';
+            }
+        });
+    </script>
+</body>
+</html>

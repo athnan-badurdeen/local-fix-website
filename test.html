@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Test</title>
+</head>
+<body>
+    <h1>LocalFix Authentication Test</h1>
+    <button onclick="testRegister()">1. Test Register</button>
+    <button onclick="testLogin()">2. Test Login</button>
+    <button onclick="checkUsers()">3. Check Users</button>
+    <button onclick="clearData()">4. Clear All Data</button>
+    
+    <pre id="output" style="margin-top: 20px; padding: 10px; background: #f0f0f0;"></pre>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const output = document.getElementById('output');
+        
+        function testRegister() {
+            const result = registerUser({
+                name: 'Test User',
+                email: 'test@test.com',
+                phone: '1234567890',
+                location: 'Mumbai',
+                password: 'password123',
+                role: 'buyer',
+                serviceType: null
+            });
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+        
+        function testLogin() {
+            const result = loginUser('test@test.com', 'password123');
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+        
+        function checkUsers() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            output.textContent = 'Total Users: ' + users.length + '\n\n' + JSON.stringify(users, null, 2);
+        }
+        
+        function clearData() {
+            localStorage.clear();
+            output.textContent = 'All data cleared!';
+        }
+    </script>
+</body>
+</html>
