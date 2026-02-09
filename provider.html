@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Profile - LocalFix</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+      <nav class="navbar navbar-dashboard">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link">
+                <h2 class="brand"><span class="brand-local">Local</span><span class="brand-fix">Fix</span></h2>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="buyer.html" class="active">Browse Services</a></li>
+                <li><a href="my-bookings.html">Bookings </a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" id="logoutBtn" class="btn-outline">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <div class="avatar-circle">
+                        <span id="providerInitials">RP</span>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h1 id="providerName">Madhawa Hettiarachi</h1>
+                    <p class="profile-service" id="providerService">Professional Plumber</p>
+                    <p class="profile-location" id="providerLocation">Panadura</p>
+                    <div class="profile-badges">
+                        <span class="badge badge-verified">✓ Verified</span>
+                        <span class="badge badge-available">Available</span>
+                    </div>
+                </div>
+                <div class="profile-rating">
+                    <div class="rating-box">
+                        <div class="rating-value" id="providerRating">4.8</div>
+                        <div class="rating-stars">★★★★☆</div>
+                        <p id="reviewCount">24 reviews</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-main">
+                    <!-- About Section -->
+                    <div class="profile-section">
+                        <h2>About</h2>
+                        <p id="providerAbout">Experienced plumber with over 8 years in the industry. Specializing in residential and commercial plumbing services. Available for emergency calls 24/7.</p>
+                    </div>
+
+                    <!-- Services Offered -->
+                    <div class="profile-section">
+                        <h2>Services Offered</h2>
+                        <div class="services-offered" id="servicesOffered"></div>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="profile-section">
+                        <h2>Experience</h2>
+                        <div id="experienceList"></div>
+                        <div id="certificationsList"></div>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="profile-section">
+                        <h2>Customer Reviews</h2>
+                        <div class="reviews-list" id="reviewsList">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <h4>Mohamed Arzan</h4>
+                                    <div class="stars">★★★★★</div>
+                                </div>
+                                <p>"Excellent service! Fixed my problem quickly and professionally. Highly recommended!"</p>
+                                <span class="review-date">2 days ago</span>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <h4>Hashini Perera</h4>
+                                    <div class="stars">★★★★★</div>
+                                </div>
+                                <p>"Very professional and courteous. Arrived on time and completed the work efficiently."</p>
+                                <span class="review-date">1 week ago</span>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <h4>Pasindu Maduwantha</h4>
+                                    <div class="stars">★★★★☆</div>
+                                </div>
+                                <p>"Good work, reasonable pricing. Would hire again."</p>
+                                <span class="review-date">2 weeks ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="booking-card">
+                        <h3>Book This Service</h3>
+                        <p class="price-range" id="priceRange"></p>
+                        <p class="availability-info" id="availabilityInfo"></p>
+                        <button class="btn-primary btn-full" id="bookNowBtn">Book Now</button>
+                        <button class="btn-outline btn-full" id="contactBtn">Contact Provider</button>
+                    </div>
+
+                    <div class="quick-info">
+                        <h3>Quick Info</h3>
+                        <ul id="quickInfoList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check if user is logged in
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            logoutUser();
+            window.location.href = 'index.html';
+        });
+
+        // Get provider ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const providerId = urlParams.get('id');
+
+        if (providerId) {
+            const provider = getProviderById(providerId);
+            if (provider) {
+                // Populate provider details
+                document.getElementById('providerName').textContent = provider.name;
+                document.getElementById('providerService').textContent = provider.service;
+                document.getElementById('providerLocation').textContent = '📍 ' + provider.location;
+                document.getElementById('providerRating').textContent = provider.rating;
+                document.getElementById('reviewCount').textContent = provider.reviews + ' reviews';
+                document.getElementById('providerAbout').textContent = provider.about || `Experienced ${provider.service.toLowerCase()} with years of professional service.`;
+                
+                // Set initials
+                const initials = provider.name.split(' ').map(n => n[0]).join('');
+                document.getElementById('providerInitials').textContent = initials;
+
+                //later
+                const servicesContainer = document.getElementById('servicesOffered');
+                servicesContainer.innerHTML = ''; // clear hard-coded HTML
+
+                if(provider){
+                    // ===== Render Experience =====
+                const experienceContainer = document.getElementById('experienceList');
+                experienceContainer.innerHTML = '';
+
+                if (provider.experience) {
+                    const expItem = document.createElement('div');
+                    expItem.className = 'experience-item';
+
+                    expItem.innerHTML = `
+                        <h3>${provider.experience.years}</h3>
+                        <p>${provider.experience.description}</p>
+                    `;
+
+                    experienceContainer.appendChild(expItem);
+                } else {
+                    experienceContainer.innerHTML = '<p>No experience details available.</p>';
+                }
+                }
+
+                if(provider){
+                    // ===== Render Certifications =====
+                const certContainer = document.getElementById('certificationsList');
+                certContainer.innerHTML = '';
+
+                if (provider.certifications && provider.certifications.length > 0) {
+                    const certItem = document.createElement('div');
+                    certItem.className = 'experience-item';
+
+                    certItem.innerHTML = `
+                        <h3>Certifications</h3>
+                        <ul>
+                            ${provider.certifications.map(cert => `<li>${cert}</li>`).join('')}
+                        </ul>
+                    `;
+
+                    certContainer.appendChild(certItem);
+                } else {
+                    certContainer.innerHTML = '<p>No certifications listed.</p>';
+                }
+
+                if(provider){
+                    // Quick Info
+                const quickInfoList = document.getElementById('quickInfoList');
+                quickInfoList.innerHTML = `
+                    <li><strong>Response Time:</strong> ${provider.quickInfo.responseTime}</li>
+                    <li><strong>Experience:</strong> ${provider.quickInfo.experience}</li>
+                    <li><strong>Languages:</strong> ${provider.quickInfo.languages}</li>
+                    <li><strong>Service Area:</strong> ${provider.quickInfo.serviceArea}</li>
+                `;
+
+                // Booking Info
+                document.getElementById('priceRange').textContent =
+                    `Rs ${provider.booking.minPrice} - Rs ${provider.booking.maxPrice}`;
+
+                document.getElementById('availabilityInfo').textContent =
+                    provider.booking.available ? '✓ Available Now' : '✕ Not Available';
+
+                }
+
+                }
+
+
+                if (provider.services && provider.services.length > 0) {
+                    provider.services.forEach(service => {
+                        const card = document.createElement('div');
+                        card.className = 'service-offer-card';
+                        card.innerHTML = `
+                            <h3>${service.title}</h3>
+                            <p>${service.description}</p>
+                            <span class="service-price">${service.price}</span>
+                        `;
+                        servicesContainer.appendChild(card);
+                    });
+                } else {
+                    servicesContainer.innerHTML = '<p>No services available.</p>';
+                }
+            }
+        }
+
+        // Book Now button
+        document.getElementById('bookNowBtn').addEventListener('click', () => {
+            createBooking(provider.id, currentUser.id);
+            alert('Booking created successfully!');
+            window.location.href = 'my-bookings.html';
+        });
+
+
+        // Contact button
+        document.getElementById('contactBtn').addEventListener('click', function() {
+            alert('Contact feature coming soon! For now, you can call: +91 98765 43210');
+        });
+    </script>
+</body>
+
+</html>
+
+
+

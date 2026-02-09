@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - LocalFix</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h2 class="brand"><span class="brand-local">Local</span><span class="brand-fix">Fix</span></h2>
+                <h1>Create Account</h1>
+                <p>Join our community today</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <!-- Role Selection -->
+                <div class="form-group">
+                    <label>I want to</label>
+                    <div class="role-selection">
+                        <label class="role-option">
+                            <input type="radio" name="role" value="buyer" checked>
+                            <span>Find Services (Buyer)</span>
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="seller">
+                            <span>Offer Services (Provider)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" required placeholder="Enter your city">
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" name="password" required placeholder="Create a password">
+                </div>
+
+                <!-- Service Type (shown only for sellers) -->
+                <div class="form-group" id="serviceTypeGroup" style="display: none;">
+                    <label for="serviceType">Service Type</label>
+                    <select id="serviceType" name="serviceType">
+                        <option value="">Select a service</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="Carpenter">Carpenter</option>
+                        <option value="Mechanic">Mechanic</option>
+                        <option value="Painter">Painter</option>
+                        <option value="AC Technician">AC Technician</option>
+                        <option value="Other Services">Other Services...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the Terms and Conditions</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-primary btn-full">Create Account</button>
+
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="login.html" class="link">Login here</a></p>
+                </div>
+            </form>
+
+            <div id="registerError" class="error-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Show/hide service type based on role selection
+        const roleInputs = document.querySelectorAll('input[name="role"]');
+        const serviceTypeGroup = document.getElementById('serviceTypeGroup');
+        
+        roleInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.value === 'seller') {
+                    serviceTypeGroup.style.display = 'block';
+                } else {
+                    serviceTypeGroup.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle registration form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('phone').value,
+                location: document.getElementById('location').value,
+                password: document.getElementById('regPassword').value,
+                role: document.querySelector('input[name="role"]:checked').value,
+                serviceType: document.getElementById('serviceType').value
+            };
+            
+            const result = registerUser(formData);
+            
+            if (result.success) {
+                alert('Registration successful! Redirecting to login...');
+                window.location.href = 'login.html';
+            } else {
+                const errorDiv = document.getElementById('registerError');
+                errorDiv.textContent = result.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
