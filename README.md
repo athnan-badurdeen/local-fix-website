@@ -1,4 +1,4 @@
-# local-fix-website
+# local Fix - Service Provider
 
 **Local Fix** is helping the community with simple repairs and tips. This platform was developed as part of my **IIT UWU** project.
 The website allows users to browse best-selling books, explore new arrivals, and place orders easily.
